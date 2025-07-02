@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Allow requests from your frontend
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://guidopia-v2.vercel.app.app'],
+  origin: ['http://localhost:5173', 'https://guidopia-v2.vercel.app'],
   credentials: true, // Allow cookies and sessions
 }));
 
