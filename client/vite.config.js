@@ -8,8 +8,8 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      '/api': 'http://localhost:3000', // Change 5000 to your backend port if different
-      // '/api': 'https://guidopia-backend-kappa.vercel.app', // Change 5000 to your backend port if different
+      // '/api': 'http://localhost:3000', // Change 5000 to your backend port if different
+      '/api': 'https://guidopia-v2-backend.vercel.app', // Change 5000 to your backend port if different
     },
   },
 })

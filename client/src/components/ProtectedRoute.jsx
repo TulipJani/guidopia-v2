@@ -6,7 +6,8 @@ export default function ProtectedRoute({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/user/me', {
+    fetch('https://guidopia-v2-backend.vercel.app/api/user/me', {
+    // fetch('http://localhost:3000/api/user/me', {
       credentials: 'include',
     })
       .then(res => {

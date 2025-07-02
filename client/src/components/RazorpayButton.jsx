@@ -12,7 +12,8 @@ export default function RazorpayButton({ amount, courseId, courseName }) {
       order_id: data.orderId,
       handler: async function (response) {
         // Call backend to verify payment and store purchase
-        const verifyRes = await fetch('http://localhost:3000/api/payment/verify', {
+        // const verifyRes = await fetch('http://localhost:3000/api/payment/verify', {
+        const verifyRes = await fetch('https://guidopia-v2-backend.vercel.app/api/payment/verify', {
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },

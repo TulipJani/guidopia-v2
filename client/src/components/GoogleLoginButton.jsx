@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaGoogle } from 'react-icons/fa'; // Make sure to install react-icons
 
-const GOOGLE_AUTH_URL = 'http://localhost:3000/auth/google';
+const GOOGLE_AUTH_URL = 'https://guidopia-v2-backend.vercel.app/auth/google';
 
 export default function GoogleLoginButton() {
   return (
