@@ -12,12 +12,12 @@ router.get('/google/callback',
   async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user.onboardingComplete) {
-      res.redirect('http://localhost:5173/onboarding');
-      // res.redirect('https://guidopia-v2.vercel.app.app//onboarding');
+      // res.redirect('http://localhost:5173/onboarding');
+      res.redirect('https://guidopia-v2.vercel.app.app//onboarding');
 
     } else {
-      res.redirect('http://localhost:5173/dashboard');
-      // res.redirect('https://guidopia-v2.vercel.app.app/dashboard');
+      // res.redirect('http://localhost:5173/dashboard');
+      res.redirect('https://guidopia-v2.vercel.app.app/dashboard');
     }
   }
 );
