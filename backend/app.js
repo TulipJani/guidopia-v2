@@ -26,10 +26,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Allow requests from your frontend
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://guidopia-v2.vercel.app'],
+  origin: [
+    'http://localhost:5173',
+    'https://guidopia-psi.vercel.app',
+    'https://guidopia-v2.vercel.app'
+  ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 mongoose.connect(process.env.MONGO_URI)
@@ -45,6 +47,10 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    sameSite: 'none',
+    secure: true
+  }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
