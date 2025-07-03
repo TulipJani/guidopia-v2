@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
+const MongoStore = require('connect-mongo'); // Add this package
 const passport = require('passport');
 const mongoose = require('mongoose');
 require('dotenv').config();
@@ -18,13 +19,16 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+// Trust proxy for production
+app.set('trust proxy', 1);
+
 app.use(logger('dev'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Allow requests from your frontend
+// CORS configuration - MUST be before session
 app.use(cors({
   origin: [
     'http://localhost:5173',
@@ -32,8 +36,9 @@ app.use(cors({
     'https://guidopia-v2.vercel.app'
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 }));
 
 mongoose.connect(process.env.MONGO_URI)
@@ -42,18 +47,27 @@ mongoose.connect(process.env.MONGO_URI)
   })
   .catch((err) => {
     console.error('❌ MongoDB connection error:', err);
-    process.exit(1); // Stop the server if DB connection fails
+    process.exit(1);
   });
 
+// Fixed session configuration with MongoDB store
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    touchAfter: 24 * 3600 // lazy session update
+  }),
   cookie: {
-    sameSite: 'none',
-    secure: true
-  }
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  },
+  name: 'guidopia.sid'
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -84,11 +98,8 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });

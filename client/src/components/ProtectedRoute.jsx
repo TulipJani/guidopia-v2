@@ -23,9 +23,7 @@ export default function ProtectedRoute({ children }) {
           const userData = await response.json();
           setUser(userData);
           setAuthenticated(true);
-          console.log('User authenticated:', userData);
         } else {
-          console.log('Authentication failed:', response.status, response.statusText);
           setAuthenticated(false);
           setUser(null);
         }
@@ -41,7 +39,6 @@ export default function ProtectedRoute({ children }) {
     checkAuth();
   }, []);
 
-  // Enhanced loading component
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
@@ -54,7 +51,6 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  // Redirect to login if not authenticated
   if (!authenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
