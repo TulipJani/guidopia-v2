@@ -32,6 +32,8 @@ app.use(cors({
     'https://guidopia-v2.vercel.app'
   ],
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 mongoose.connect(process.env.MONGO_URI)
