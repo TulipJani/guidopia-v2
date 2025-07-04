@@ -101,9 +101,9 @@ const ProfilePage = () => {
       const res = await fetch('/api/user/profile', {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ profilePic: profilePicDraft })
       });
       if (!res.ok) throw new Error('Failed to update profile picture');
@@ -140,9 +140,9 @@ const ProfilePage = () => {
       const res = await fetch('/api/user/profile', {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ socialLinks: socialLinksDraft })
       });
       if (!res.ok) throw new Error('Failed to update social links');
@@ -159,9 +159,9 @@ const ProfilePage = () => {
       const res = await fetch('/api/futureme/role', {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ futureRole: futureRoleDraft })
       });
       if (!res.ok) throw new Error('Failed to update future role');
@@ -204,9 +204,9 @@ const ProfilePage = () => {
       const res = await fetch('/api/user/profile', {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ experience: experienceDraft })
       });
       if (!res.ok) throw new Error('Failed to update experience');
@@ -223,12 +223,17 @@ const ProfilePage = () => {
         // Fetch user profile with populated onboarding and futureMeCard
         const userResponse = await fetch('/api/user/profile', {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'application/json'
-          }
+          },
+          credentials: 'include' // This is important for session cookies
         });
         
         if (!userResponse.ok) {
+          if (userResponse.status === 401) {
+            // User is not authenticated, redirect to login
+            window.location.href = '/login';
+            return;
+          }
           throw new Error('Failed to fetch user profile');
         }
         
@@ -631,14 +636,14 @@ const ProfilePage = () => {
                     className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-md font-semibold"
                     onClick={async () => {
                       try {
-                        const res = await fetch('/api/user/profile', {
-                          method: 'PUT',
-                          headers: {
-                            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                            'Content-Type': 'application/json'
-                          },
-                          body: JSON.stringify({ about: aboutDraft })
-                        });
+                                const res = await fetch('/api/user/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({ about: aboutDraft })
+        });
                         if (!res.ok) throw new Error('Failed to update About Me');
                         const data = await res.json();
                         setProfile(prev => ({ ...prev, about: aboutDraft }));
@@ -767,14 +772,14 @@ const ProfilePage = () => {
                   const newLinks = [...(profile.socialLinks || []), newLink];
                   setProfile(prev => ({ ...prev, socialLinks: newLinks }));
                   setAddUrl('');
-                  await fetch('/api/user/profile', {
-                    method: 'PUT',
-                    headers: {
-                      'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ socialLinks: newLinks })
-                  });
+                                              await fetch('/api/user/profile', {
+                              method: 'PUT',
+                              headers: {
+                                'Content-Type': 'application/json'
+                              },
+                              credentials: 'include',
+                              body: JSON.stringify({ socialLinks: newLinks })
+                            });
                 }}
               >
                 <input
@@ -1106,9 +1111,9 @@ const ProfilePage = () => {
                       const res = await fetch('/api/futureme/generate', {
                         method: 'POST',
                         headers: {
-                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
                           'Content-Type': 'application/json'
                         },
+                        credentials: 'include',
                         body: JSON.stringify(onboardingData)
                       });
                       

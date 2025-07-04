@@ -10,6 +10,11 @@ function ensureAuth(req, res, next) {
   res.status(401).json({ message: 'Unauthorized' });
 }
 
+// Test endpoint to check if route is accessible
+router.get('/test', (req, res) => {
+  res.json({ message: 'User route is accessible', authenticated: req.isAuthenticated() });
+});
+
 // Onboarding question (POST)
 router.post('/onboarding', ensureAuth, async (req, res) => {
   // Save onboarding data

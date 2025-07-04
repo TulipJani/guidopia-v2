@@ -777,12 +777,12 @@ export default function Upskilling() {
     // Fetch user profile to check existing skills
     const fetchProfile = async () => {
       try {
-        const res = await fetch('/api/user/profile', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-          }
-        });
+              const res = await fetch('/api/user/profile', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      });
         if (res.ok) {
           const data = await res.json();
           setProfile(data);
