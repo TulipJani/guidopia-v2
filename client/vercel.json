@@ -3,6 +3,10 @@
         {
             "source": "/(.*)",
             "destination": "/index.html"
+        },
+        {
+            "source": "/api/(.*)",
+            "destination": "https://guidopia-v2-backend.vercel.app/api/$1"
         }
     ]
 }
